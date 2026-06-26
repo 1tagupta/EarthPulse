@@ -1,4 +1,3 @@
-import { Location } from '@/types';
 
 export interface StudyArea {
   id: string;

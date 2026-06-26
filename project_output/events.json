@@ -1,0 +1,56 @@
+[
+  {
+    "type": "drought",
+    "start": "2015-01-05",
+    "end": "2015-05-25",
+    "duration": 21,
+    "peakIntensity": -2.5463,
+    "severity": "extreme",
+    "confidence": 0.85
+  },
+  {
+    "type": "drought",
+    "start": "2015-11-02",
+    "end": "2015-12-21",
+    "duration": 8,
+    "peakIntensity": -2.1369,
+    "severity": "extreme",
+    "confidence": 0.85
+  },
+  {
+    "type": "flood",
+    "start": "2018-04-16",
+    "end": "2018-05-07",
+    "duration": 4,
+    "peakIntensity": 12.6875,
+    "severity": "high",
+    "confidence": 0.9
+  },
+  {
+    "type": "flood",
+    "start": "2021-03-01",
+    "end": "2021-03-15",
+    "duration": 3,
+    "peakIntensity": 12.0539,
+    "severity": "high",
+    "confidence": 0.9
+  },
+  {
+    "type": "flood",
+    "start": "2024-09-23",
+    "end": "2024-10-07",
+    "duration": 3,
+    "peakIntensity": 20.1929,
+    "severity": "high",
+    "confidence": 0.9
+  },
+  {
+    "type": "flood",
+    "start": "2024-12-02",
+    "end": "2024-12-16",
+    "duration": 3,
+    "peakIntensity": 12.1991,
+    "severity": "high",
+    "confidence": 0.9
+  }
+]

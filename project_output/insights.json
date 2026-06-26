@@ -1,0 +1,18 @@
+[
+  {
+    "type": "groundwater_decline",
+    "confidence": 1.0,
+    "value": 19.27,
+    "unit": "cm/year",
+    "period": "2015-2025",
+    "significance": "significant"
+  },
+  {
+    "type": "recharge_lag",
+    "confidence": 0.193,
+    "value": 13,
+    "unit": "weeks",
+    "period": "2015-2025",
+    "mechanism": "Surface infiltration to shallow/deep mascon aquifer response delay"
+  }
+]

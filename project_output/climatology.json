@@ -1,0 +1,479 @@
+[
+  {
+    "week": 1,
+    "surfaceMoistureMean": 0.15787,
+    "surfaceMoistureStd": 0.02529,
+    "rootZoneMoistureMean": 0.26411,
+    "rootZoneMoistureStd": 0.01678,
+    "groundwaterAnomalyMean": 122.3172,
+    "groundwaterAnomalyStd": 64.1369
+  },
+  {
+    "week": 2,
+    "surfaceMoistureMean": 0.16145,
+    "surfaceMoistureStd": 0.03368,
+    "rootZoneMoistureMean": 0.24868,
+    "rootZoneMoistureStd": 0.0249,
+    "groundwaterAnomalyMean": 103.4612,
+    "groundwaterAnomalyStd": 64.4422
+  },
+  {
+    "week": 3,
+    "surfaceMoistureMean": 0.16166,
+    "surfaceMoistureStd": 0.03094,
+    "rootZoneMoistureMean": 0.24761,
+    "rootZoneMoistureStd": 0.02836,
+    "groundwaterAnomalyMean": 102.4569,
+    "groundwaterAnomalyStd": 64.5857
+  },
+  {
+    "week": 4,
+    "surfaceMoistureMean": 0.15501,
+    "surfaceMoistureStd": 0.03697,
+    "rootZoneMoistureMean": 0.24167,
+    "rootZoneMoistureStd": 0.03301,
+    "groundwaterAnomalyMean": 102.3017,
+    "groundwaterAnomalyStd": 64.4712
+  },
+  {
+    "week": 5,
+    "surfaceMoistureMean": 0.14261,
+    "surfaceMoistureStd": 0.02728,
+    "rootZoneMoistureMean": 0.23522,
+    "rootZoneMoistureStd": 0.02813,
+    "groundwaterAnomalyMean": 101.5726,
+    "groundwaterAnomalyStd": 64.8353
+  },
+  {
+    "week": 6,
+    "surfaceMoistureMean": 0.14967,
+    "surfaceMoistureStd": 0.03569,
+    "rootZoneMoistureMean": 0.23257,
+    "rootZoneMoistureStd": 0.02354,
+    "groundwaterAnomalyMean": 101.0848,
+    "groundwaterAnomalyStd": 64.443
+  },
+  {
+    "week": 7,
+    "surfaceMoistureMean": 0.13798,
+    "surfaceMoistureStd": 0.02945,
+    "rootZoneMoistureMean": 0.22805,
+    "rootZoneMoistureStd": 0.02847,
+    "groundwaterAnomalyMean": 100.5917,
+    "groundwaterAnomalyStd": 64.4743
+  },
+  {
+    "week": 8,
+    "surfaceMoistureMean": 0.13797,
+    "surfaceMoistureStd": 0.03062,
+    "rootZoneMoistureMean": 0.22538,
+    "rootZoneMoistureStd": 0.02025,
+    "groundwaterAnomalyMean": 100.0509,
+    "groundwaterAnomalyStd": 64.6288
+  },
+  {
+    "week": 9,
+    "surfaceMoistureMean": 0.13406,
+    "surfaceMoistureStd": 0.02324,
+    "rootZoneMoistureMean": 0.21951,
+    "rootZoneMoistureStd": 0.02144,
+    "groundwaterAnomalyMean": 99.4784,
+    "groundwaterAnomalyStd": 64.6158
+  },
+  {
+    "week": 10,
+    "surfaceMoistureMean": 0.123,
+    "surfaceMoistureStd": 0.02585,
+    "rootZoneMoistureMean": 0.21153,
+    "rootZoneMoistureStd": 0.02333,
+    "groundwaterAnomalyMean": 99.0892,
+    "groundwaterAnomalyStd": 64.6635
+  },
+  {
+    "week": 11,
+    "surfaceMoistureMean": 0.13246,
+    "surfaceMoistureStd": 0.04106,
+    "rootZoneMoistureMean": 0.20971,
+    "rootZoneMoistureStd": 0.02529,
+    "groundwaterAnomalyMean": 98.3286,
+    "groundwaterAnomalyStd": 64.7392
+  },
+  {
+    "week": 12,
+    "surfaceMoistureMean": 0.13397,
+    "surfaceMoistureStd": 0.03863,
+    "rootZoneMoistureMean": 0.20673,
+    "rootZoneMoistureStd": 0.02363,
+    "groundwaterAnomalyMean": 97.5755,
+    "groundwaterAnomalyStd": 64.4678
+  },
+  {
+    "week": 13,
+    "surfaceMoistureMean": 0.12441,
+    "surfaceMoistureStd": 0.02905,
+    "rootZoneMoistureMean": 0.20346,
+    "rootZoneMoistureStd": 0.02319,
+    "groundwaterAnomalyMean": 96.971,
+    "groundwaterAnomalyStd": 64.5948
+  },
+  {
+    "week": 14,
+    "surfaceMoistureMean": 0.12094,
+    "surfaceMoistureStd": 0.0423,
+    "rootZoneMoistureMean": 0.20105,
+    "rootZoneMoistureStd": 0.02325,
+    "groundwaterAnomalyMean": 96.4794,
+    "groundwaterAnomalyStd": 64.3051
+  },
+  {
+    "week": 15,
+    "surfaceMoistureMean": 0.13036,
+    "surfaceMoistureStd": 0.05732,
+    "rootZoneMoistureMean": 0.19559,
+    "rootZoneMoistureStd": 0.02509,
+    "groundwaterAnomalyMean": 95.8,
+    "groundwaterAnomalyStd": 64.3132
+  },
+  {
+    "week": 16,
+    "surfaceMoistureMean": 0.11972,
+    "surfaceMoistureStd": 0.05735,
+    "rootZoneMoistureMean": 0.19215,
+    "rootZoneMoistureStd": 0.02547,
+    "groundwaterAnomalyMean": 95.4503,
+    "groundwaterAnomalyStd": 64.2489
+  },
+  {
+    "week": 17,
+    "surfaceMoistureMean": 0.13365,
+    "surfaceMoistureStd": 0.05278,
+    "rootZoneMoistureMean": 0.18933,
+    "rootZoneMoistureStd": 0.02523,
+    "groundwaterAnomalyMean": 94.995,
+    "groundwaterAnomalyStd": 64.3258
+  },
+  {
+    "week": 18,
+    "surfaceMoistureMean": 0.13388,
+    "surfaceMoistureStd": 0.05402,
+    "rootZoneMoistureMean": 0.18323,
+    "rootZoneMoistureStd": 0.02604,
+    "groundwaterAnomalyMean": 94.2439,
+    "groundwaterAnomalyStd": 64.5096
+  },
+  {
+    "week": 19,
+    "surfaceMoistureMean": 0.13537,
+    "surfaceMoistureStd": 0.03501,
+    "rootZoneMoistureMean": 0.18886,
+    "rootZoneMoistureStd": 0.02703,
+    "groundwaterAnomalyMean": 93.7069,
+    "groundwaterAnomalyStd": 64.433
+  },
+  {
+    "week": 20,
+    "surfaceMoistureMean": 0.14511,
+    "surfaceMoistureStd": 0.04423,
+    "rootZoneMoistureMean": 0.18246,
+    "rootZoneMoistureStd": 0.02477,
+    "groundwaterAnomalyMean": 92.7512,
+    "groundwaterAnomalyStd": 64.078
+  },
+  {
+    "week": 21,
+    "surfaceMoistureMean": 0.15801,
+    "surfaceMoistureStd": 0.03636,
+    "rootZoneMoistureMean": 0.18006,
+    "rootZoneMoistureStd": 0.02526,
+    "groundwaterAnomalyMean": 92.4118,
+    "groundwaterAnomalyStd": 64.3942
+  },
+  {
+    "week": 22,
+    "surfaceMoistureMean": 0.18661,
+    "surfaceMoistureStd": 0.04023,
+    "rootZoneMoistureMean": 0.18402,
+    "rootZoneMoistureStd": 0.02427,
+    "groundwaterAnomalyMean": 92.3924,
+    "groundwaterAnomalyStd": 64.224
+  },
+  {
+    "week": 23,
+    "surfaceMoistureMean": 0.23513,
+    "surfaceMoistureStd": 0.05017,
+    "rootZoneMoistureMean": 0.18584,
+    "rootZoneMoistureStd": 0.02377,
+    "groundwaterAnomalyMean": 91.6882,
+    "groundwaterAnomalyStd": 64.2472
+  },
+  {
+    "week": 24,
+    "surfaceMoistureMean": 0.29793,
+    "surfaceMoistureStd": 0.06292,
+    "rootZoneMoistureMean": 0.18575,
+    "rootZoneMoistureStd": 0.02743,
+    "groundwaterAnomalyMean": 91.4065,
+    "groundwaterAnomalyStd": 64.331
+  },
+  {
+    "week": 25,
+    "surfaceMoistureMean": 0.36627,
+    "surfaceMoistureStd": 0.04354,
+    "rootZoneMoistureMean": 0.19659,
+    "rootZoneMoistureStd": 0.03039,
+    "groundwaterAnomalyMean": 91.6159,
+    "groundwaterAnomalyStd": 64.362
+  },
+  {
+    "week": 26,
+    "surfaceMoistureMean": 0.42115,
+    "surfaceMoistureStd": 0.01711,
+    "rootZoneMoistureMean": 0.20821,
+    "rootZoneMoistureStd": 0.02982,
+    "groundwaterAnomalyMean": 91.8268,
+    "groundwaterAnomalyStd": 63.9625
+  },
+  {
+    "week": 27,
+    "surfaceMoistureMean": 0.4188,
+    "surfaceMoistureStd": 0.01698,
+    "rootZoneMoistureMean": 0.21719,
+    "rootZoneMoistureStd": 0.02474,
+    "groundwaterAnomalyMean": 92.3934,
+    "groundwaterAnomalyStd": 64.0425
+  },
+  {
+    "week": 28,
+    "surfaceMoistureMean": 0.41529,
+    "surfaceMoistureStd": 0.01564,
+    "rootZoneMoistureMean": 0.23006,
+    "rootZoneMoistureStd": 0.02829,
+    "groundwaterAnomalyMean": 92.9842,
+    "groundwaterAnomalyStd": 63.9243
+  },
+  {
+    "week": 29,
+    "surfaceMoistureMean": 0.41858,
+    "surfaceMoistureStd": 0.01706,
+    "rootZoneMoistureMean": 0.2377,
+    "rootZoneMoistureStd": 0.0233,
+    "groundwaterAnomalyMean": 94.5948,
+    "groundwaterAnomalyStd": 63.8162
+  },
+  {
+    "week": 30,
+    "surfaceMoistureMean": 0.41209,
+    "surfaceMoistureStd": 0.0118,
+    "rootZoneMoistureMean": 0.24751,
+    "rootZoneMoistureStd": 0.02055,
+    "groundwaterAnomalyMean": 95.8749,
+    "groundwaterAnomalyStd": 63.9932
+  },
+  {
+    "week": 31,
+    "surfaceMoistureMean": 0.4209,
+    "surfaceMoistureStd": 0.012,
+    "rootZoneMoistureMean": 0.25823,
+    "rootZoneMoistureStd": 0.02021,
+    "groundwaterAnomalyMean": 97.4637,
+    "groundwaterAnomalyStd": 63.913
+  },
+  {
+    "week": 32,
+    "surfaceMoistureMean": 0.4249,
+    "surfaceMoistureStd": 0.01124,
+    "rootZoneMoistureMean": 0.26407,
+    "rootZoneMoistureStd": 0.02079,
+    "groundwaterAnomalyMean": 99.4937,
+    "groundwaterAnomalyStd": 63.5996
+  },
+  {
+    "week": 33,
+    "surfaceMoistureMean": 0.41668,
+    "surfaceMoistureStd": 0.01073,
+    "rootZoneMoistureMean": 0.27185,
+    "rootZoneMoistureStd": 0.02678,
+    "groundwaterAnomalyMean": 102.1958,
+    "groundwaterAnomalyStd": 63.6642
+  },
+  {
+    "week": 34,
+    "surfaceMoistureMean": 0.42165,
+    "surfaceMoistureStd": 0.01462,
+    "rootZoneMoistureMean": 0.28027,
+    "rootZoneMoistureStd": 0.02141,
+    "groundwaterAnomalyMean": 104.6321,
+    "groundwaterAnomalyStd": 63.7808
+  },
+  {
+    "week": 35,
+    "surfaceMoistureMean": 0.42169,
+    "surfaceMoistureStd": 0.01132,
+    "rootZoneMoistureMean": 0.28531,
+    "rootZoneMoistureStd": 0.01724,
+    "groundwaterAnomalyMean": 107.0731,
+    "groundwaterAnomalyStd": 63.8226
+  },
+  {
+    "week": 36,
+    "surfaceMoistureMean": 0.41687,
+    "surfaceMoistureStd": 0.01586,
+    "rootZoneMoistureMean": 0.28973,
+    "rootZoneMoistureStd": 0.01422,
+    "groundwaterAnomalyMean": 110.159,
+    "groundwaterAnomalyStd": 63.8341
+  },
+  {
+    "week": 37,
+    "surfaceMoistureMean": 0.41116,
+    "surfaceMoistureStd": 0.01662,
+    "rootZoneMoistureMean": 0.29904,
+    "rootZoneMoistureStd": 0.01961,
+    "groundwaterAnomalyMean": 112.5336,
+    "groundwaterAnomalyStd": 63.763
+  },
+  {
+    "week": 38,
+    "surfaceMoistureMean": 0.40229,
+    "surfaceMoistureStd": 0.01969,
+    "rootZoneMoistureMean": 0.30288,
+    "rootZoneMoistureStd": 0.01499,
+    "groundwaterAnomalyMean": 115.1365,
+    "groundwaterAnomalyStd": 63.599
+  },
+  {
+    "week": 39,
+    "surfaceMoistureMean": 0.37362,
+    "surfaceMoistureStd": 0.03086,
+    "rootZoneMoistureMean": 0.30645,
+    "rootZoneMoistureStd": 0.01351,
+    "groundwaterAnomalyMean": 117.3986,
+    "groundwaterAnomalyStd": 63.2357
+  },
+  {
+    "week": 40,
+    "surfaceMoistureMean": 0.35778,
+    "surfaceMoistureStd": 0.02198,
+    "rootZoneMoistureMean": 0.31499,
+    "rootZoneMoistureStd": 0.01639,
+    "groundwaterAnomalyMean": 119.3388,
+    "groundwaterAnomalyStd": 64.0839
+  },
+  {
+    "week": 41,
+    "surfaceMoistureMean": 0.32584,
+    "surfaceMoistureStd": 0.02634,
+    "rootZoneMoistureMean": 0.31138,
+    "rootZoneMoistureStd": 0.01559,
+    "groundwaterAnomalyMean": 121.0064,
+    "groundwaterAnomalyStd": 63.7515
+  },
+  {
+    "week": 42,
+    "surfaceMoistureMean": 0.29917,
+    "surfaceMoistureStd": 0.02686,
+    "rootZoneMoistureMean": 0.3131,
+    "rootZoneMoistureStd": 0.01834,
+    "groundwaterAnomalyMean": 122.4455,
+    "groundwaterAnomalyStd": 63.5934
+  },
+  {
+    "week": 43,
+    "surfaceMoistureMean": 0.26629,
+    "surfaceMoistureStd": 0.02674,
+    "rootZoneMoistureMean": 0.31317,
+    "rootZoneMoistureStd": 0.01157,
+    "groundwaterAnomalyMean": 123.7199,
+    "groundwaterAnomalyStd": 63.681
+  },
+  {
+    "week": 44,
+    "surfaceMoistureMean": 0.25372,
+    "surfaceMoistureStd": 0.02255,
+    "rootZoneMoistureMean": 0.30488,
+    "rootZoneMoistureStd": 0.01293,
+    "groundwaterAnomalyMean": 124.3557,
+    "groundwaterAnomalyStd": 63.7937
+  },
+  {
+    "week": 45,
+    "surfaceMoistureMean": 0.24109,
+    "surfaceMoistureStd": 0.04742,
+    "rootZoneMoistureMean": 0.30584,
+    "rootZoneMoistureStd": 0.01601,
+    "groundwaterAnomalyMean": 124.8669,
+    "groundwaterAnomalyStd": 63.6335
+  },
+  {
+    "week": 46,
+    "surfaceMoistureMean": 0.21928,
+    "surfaceMoistureStd": 0.04295,
+    "rootZoneMoistureMean": 0.29607,
+    "rootZoneMoistureStd": 0.01382,
+    "groundwaterAnomalyMean": 124.77,
+    "groundwaterAnomalyStd": 63.6492
+  },
+  {
+    "week": 47,
+    "surfaceMoistureMean": 0.20355,
+    "surfaceMoistureStd": 0.04554,
+    "rootZoneMoistureMean": 0.29023,
+    "rootZoneMoistureStd": 0.0163,
+    "groundwaterAnomalyMean": 124.8591,
+    "groundwaterAnomalyStd": 63.7961
+  },
+  {
+    "week": 48,
+    "surfaceMoistureMean": 0.19164,
+    "surfaceMoistureStd": 0.02957,
+    "rootZoneMoistureMean": 0.28922,
+    "rootZoneMoistureStd": 0.01834,
+    "groundwaterAnomalyMean": 124.7617,
+    "groundwaterAnomalyStd": 63.5125
+  },
+  {
+    "week": 49,
+    "surfaceMoistureMean": 0.19092,
+    "surfaceMoistureStd": 0.04081,
+    "rootZoneMoistureMean": 0.28071,
+    "rootZoneMoistureStd": 0.01544,
+    "groundwaterAnomalyMean": 124.298,
+    "groundwaterAnomalyStd": 63.5992
+  },
+  {
+    "week": 50,
+    "surfaceMoistureMean": 0.17599,
+    "surfaceMoistureStd": 0.03634,
+    "rootZoneMoistureMean": 0.27719,
+    "rootZoneMoistureStd": 0.01966,
+    "groundwaterAnomalyMean": 123.7155,
+    "groundwaterAnomalyStd": 63.8254
+  },
+  {
+    "week": 51,
+    "surfaceMoistureMean": 0.16642,
+    "surfaceMoistureStd": 0.03526,
+    "rootZoneMoistureMean": 0.27062,
+    "rootZoneMoistureStd": 0.02156,
+    "groundwaterAnomalyMean": 123.5443,
+    "groundwaterAnomalyStd": 64.0107
+  },
+  {
+    "week": 52,
+    "surfaceMoistureMean": 0.16827,
+    "surfaceMoistureStd": 0.02658,
+    "rootZoneMoistureMean": 0.26328,
+    "rootZoneMoistureStd": 0.01748,
+    "groundwaterAnomalyMean": 122.8698,
+    "groundwaterAnomalyStd": 63.9242
+  },
+  {
+    "week": 53,
+    "surfaceMoistureMean": 0.15883,
+    "surfaceMoistureStd": 0.03108,
+    "rootZoneMoistureMean": 0.25126,
+    "rootZoneMoistureStd": 0.01662,
+    "groundwaterAnomalyMean": 74.1842,
+    "groundwaterAnomalyStd": 68.463
+  }
+]

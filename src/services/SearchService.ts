@@ -1,29 +1,68 @@
 import { Location } from '@/types';
 
-// Mock database for now
-const PREDEFINED_LOCATIONS: Record<string, Location> = {
-  california: { id: 'us-ca', name: 'California', country: 'United States', coordinates: { lat: 36.77, lon: -119.41, x: -1.2, y: 1.5, z: 2.2 } },
-  bihar: { id: 'in-br', name: 'Bihar', country: 'India', coordinates: { lat: 25.09, lon: 85.31, x: 1.8, y: 0.9, z: 1.8 } },
-  nile: { id: 'eg-nile', name: 'Nile Basin', country: 'Egypt', coordinates: { lat: 30.04, lon: 31.23, x: 2.2, y: 1.1, z: -0.5 } },
-  amazon: { id: 'br-amz', name: 'Amazon Rainforest', country: 'Brazil', coordinates: { lat: -3.46, lon: -62.21, x: -1.5, y: -0.2, z: 2.5 } },
-};
-
 export class SearchService {
   /**
-   * Search for a location by text query.
-   * In a future milestone, this will call a real geocoding API.
+   * Search for locations by text query using OpenStreetMap Nominatim API.
+   * Returns a list of matching locations with full geocoded details.
    */
-  static async query(searchTerm: string): Promise<Location | null> {
-    const normalized = searchTerm.toLowerCase().trim();
-    const key = Object.keys(PREDEFINED_LOCATIONS).find((k) => normalized.includes(k));
-    
-    // Simulate network delay for loading states
-    await new Promise((resolve) => setTimeout(resolve, 300));
-    
-    if (key) {
-      return PREDEFINED_LOCATIONS[key];
+  static async query(searchTerm: string): Promise<Location[]> {
+    if (!searchTerm.trim()) return [];
+
+    try {
+      const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
+        searchTerm
+      )}&format=json&addressdetails=1&limit=5`;
+      
+      const response = await fetch(url, {
+        headers: {
+          'Accept': 'application/json',
+          'User-Agent': 'EarthPulse Hydrology Analytics Engine'
+        }
+      });
+      
+      if (!response.ok) {
+        throw new Error('Geocoding service unavailable');
+      }
+
+      const results = await response.json();
+
+      return results.map((item: any) => {
+        const lat = parseFloat(item.lat);
+        const lon = parseFloat(item.lon);
+
+        // Convert spherical coords to 3D Cartesian coords for camera positioning
+        // Radius of 4.5 gives a good height above the Earth sphere of radius 2
+        const radius = 4.5;
+        const phi = (lat * Math.PI) / 180;
+        const theta = (lon * Math.PI) / 180;
+        const x = -radius * Math.cos(phi) * Math.sin(theta);
+        const y = radius * Math.sin(phi);
+        const z = radius * Math.cos(phi) * Math.cos(theta);
+
+        // Parse bounding box: Nominatim returns [minlat, maxlat, minlon, maxlon]
+        const bbox = item.boundingbox 
+          ? [parseFloat(item.boundingbox[0]), parseFloat(item.boundingbox[1]), parseFloat(item.boundingbox[2]), parseFloat(item.boundingbox[3])] as [number, number, number, number]
+          : [lat - 0.5, lat + 0.5, lon - 0.5, lon + 0.5] as [number, number, number, number];
+
+        // Determine name and administrative level
+        const addr = item.address || {};
+        const name = addr.city || addr.town || addr.municipality || addr.state || addr.country || item.display_name.split(',')[0];
+        const country = addr.country || 'Global';
+        const adminLevel = item.type || item.class || 'administrative';
+
+        return {
+          id: String(item.place_id),
+          name,
+          country,
+          coordinates: { lat, lon, x, y, z },
+          boundingBox: bbox,
+          adminLevel,
+          displayName: item.display_name
+        };
+      });
+    } catch (error) {
+      console.error('Geocoding error:', error);
+      return [];
     }
-    
-    return PREDEFINED_LOCATIONS['california']; // Fallback for Milestone 1 behavior
   }
 }

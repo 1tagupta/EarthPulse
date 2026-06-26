@@ -10,6 +10,9 @@ export interface Location {
     y: number;
     z: number;
   };
+  boundingBox?: [number, number, number, number]; // [minlat, maxlat, minlon, maxlon]
+  adminLevel?: string;
+  displayName?: string;
   metadata?: {
     sizeKm2: number;
     climateClass: string;

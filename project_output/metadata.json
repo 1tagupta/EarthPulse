@@ -1,0 +1,22 @@
+{
+  "location_name": "Bihar, India",
+  "center": [
+    25.09,
+    85.31
+  ],
+  "area_sqkm": 94163.0,
+  "bounds": [
+    83.3,
+    24.3,
+    88.3,
+    27.5
+  ],
+  "start_date": "2015-01-04",
+  "end_date": "2025-12-28",
+  "available_datasets": [
+    "SMAP Version 8",
+    "GRACE Mascons CRI V4",
+    "CHIRPS Rainfall v2.0"
+  ],
+  "citation": "Telemetry retrieved from NASA Earthdata and USGS FEWS NET."
+}

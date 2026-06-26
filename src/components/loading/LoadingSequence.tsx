@@ -1,76 +1,145 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAppStore } from '@/stores/useAppStore';
-
-const LOADING_STEPS = [
-  "Connecting to EarthPulse Dataset...",
-  "Loading metadata.json...",
-  "Loading geometry.geojson...",
-  "Loading timeline.json...",
-  "Loading climatology.json...",
-  "Loading analytics.json...",
-  "Preparing visualization engine...",
-  "Initializing research workspace..."
-];
+import { useProjectStore } from '@/stores/useProjectStore';
+import { useCameraStore } from '@/stores/useCameraStore';
+import { ProjectLoader } from '@/services/ProjectLoader';
+import { AlertOctagon, RefreshCw, ChevronLeft } from 'lucide-react';
 
 export default function LoadingSequence() {
-  const [currentStep, setCurrentStep] = useState(0);
   const appState = useAppStore((state) => state.phase);
   const setAppState = useAppStore((state) => state.setPhase);
+  
+  const isFlying = useCameraStore((state) => state.isFlying);
+  const { isLoading, loadingProgress, loadingStep, error, clearProjectData } = useProjectStore();
 
+  const [completedSteps, setCompletedSteps] = useState<string[]>([]);
+
+  // Trigger loading when transition starts
   useEffect(() => {
-    if (appState !== 'transition') return;
+    if (appState === 'transition') {
+      setCompletedSteps([]);
+      ProjectLoader.loadProject();
+    }
+  }, [appState]);
 
-    let step = 0;
-    const interval = setInterval(() => {
-      step++;
-      if (step >= LOADING_STEPS.length) {
-        clearInterval(interval);
-        setTimeout(() => setAppState('workspace'), 800); // Wait briefly then enter workspace
-      } else {
-        setCurrentStep(step);
-      }
-    }, 400); // 400ms per simulated log
+  // Keep track of completed steps for terminal output log
+  useEffect(() => {
+    if (loadingStep && !completedSteps.includes(loadingStep)) {
+      setCompletedSteps((prev) => [...prev, loadingStep]);
+    }
+  }, [loadingStep, completedSteps]);
 
-    return () => clearInterval(interval);
-  }, [appState, setAppState]);
+  // Hand-off transition: enter workspace only when data is 100% loaded AND camera has finished flying
+  useEffect(() => {
+    if (appState === 'transition' && loadingProgress === 100 && !isFlying && !isLoading && !error) {
+      const timer = setTimeout(() => {
+        setAppState('workspace');
+      }, 500); // 500ms delay for a polished settle animation
+      return () => clearTimeout(timer);
+    }
+  }, [appState, loadingProgress, isFlying, isLoading, error, setAppState]);
+
+  const handleRetry = () => {
+    ProjectLoader.loadProject();
+  };
+
+  const handleGoBack = () => {
+    clearProjectData();
+    setAppState('landing');
+  };
 
   return (
     <AnimatePresence>
       {appState === 'transition' && (
         <motion.div 
-          className="absolute inset-0 flex flex-col items-center justify-center z-20 pointer-events-none"
+          className="absolute inset-0 flex flex-col items-center justify-center z-20 pointer-events-auto bg-black/40 backdrop-blur-sm"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          exit={{ opacity: 0, transition: { duration: 1 } }}
+          exit={{ opacity: 0, transition: { duration: 0.8 } }}
         >
-          <div className="bg-black/60 backdrop-blur-xl border border-white/10 rounded-2xl p-8 max-w-lg w-full shadow-2xl">
-            <h3 className="text-cyan-400 font-mono text-sm tracking-widest uppercase mb-4 opacity-80">
-              System Scan
-            </h3>
-            
-            <div className="space-y-2 h-40 overflow-hidden font-mono text-xs md:text-sm">
-              <AnimatePresence>
-                {LOADING_STEPS.slice(0, currentStep + 1).map((text, idx) => (
-                  <motion.div
-                    key={idx}
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    className={idx === currentStep ? 'text-white' : 'text-gray-500'}
-                  >
-                    <span className="text-green-500 mr-2">✓</span>
-                    {text}
-                  </motion.div>
-                ))}
-              </AnimatePresence>
+          <div className="bg-black/85 backdrop-blur-2xl border border-white/10 rounded-2xl p-8 max-w-lg w-full shadow-[0_20px_50px_rgba(0,0,0,0.9)] max-h-[500px] flex flex-col justify-between">
+            <div>
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="text-cyan-400 font-mono text-xs tracking-widest uppercase opacity-80">
+                  Planetary Water Scan
+                </h3>
+                <span className="text-[10px] text-gray-500 font-mono">
+                  {isFlying ? 'CAMERA FLYING' : 'CAMERA STABILIZED'}
+                </span>
+              </div>
+              
+              {error ? (
+                // Error terminal UI
+                <div className="space-y-4 font-mono">
+                  <div className="flex items-center gap-3 text-red-500 border border-red-500/20 bg-red-500/5 rounded-xl p-4">
+                    <AlertOctagon size={24} className="shrink-0 animate-pulse" />
+                    <div className="text-xs">
+                      <div className="font-bold uppercase mb-1">Telemetry Load Failed</div>
+                      <div className="text-gray-400 leading-normal">{error}</div>
+                    </div>
+                  </div>
+                  
+                  <div className="text-xs text-gray-500 mt-2">
+                    Ensure that the GEE project datasets have been generated by running the backend harvester script `generate_default_project.py` or `hydro_dataset_generator.py`.
+                  </div>
+                </div>
+              ) : (
+                // Asynchronous log terminal
+                <div className="space-y-2 h-44 overflow-y-auto font-mono text-xs md:text-sm custom-scrollbar pr-2">
+                  {completedSteps.map((step, idx) => {
+                    const isLast = idx === completedSteps.length - 1;
+                    return (
+                      <motion.div
+                        key={idx}
+                        initial={{ opacity: 0, x: -8 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        className={isLast ? 'text-white' : 'text-gray-500'}
+                      >
+                        <span className={isLast ? 'text-cyan-400 mr-2 animate-pulse' : 'text-green-500 mr-2'}>
+                          {isLast ? '❯' : '✓'}
+                        </span>
+                        {step}
+                      </motion.div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
             
-            <div className="w-full h-1 bg-gray-800 rounded-full mt-6 overflow-hidden">
-              <motion.div 
-                className="h-full bg-cyan-500 shadow-[0_0_10px_#06b6d4]"
-                initial={{ width: '0%' }}
-                animate={{ width: `${((currentStep + 1) / LOADING_STEPS.length) * 100}%` }}
-              />
+            {/* Progress loading bar / Action buttons */}
+            <div className="mt-8">
+              {error ? (
+                <div className="flex gap-4">
+                  <button 
+                    onClick={handleGoBack}
+                    className="flex-1 flex items-center justify-center gap-2 py-3 border border-white/10 rounded-full text-xs font-mono uppercase tracking-wider text-gray-400 hover:text-white hover:bg-white/5 transition-all"
+                  >
+                    <ChevronLeft size={14} /> Back
+                  </button>
+                  <button 
+                    onClick={handleRetry}
+                    className="flex-1 flex items-center justify-center gap-2 py-3 bg-cyan-500 hover:bg-cyan-400 text-black font-semibold rounded-full text-xs font-mono uppercase tracking-wider transition-all"
+                  >
+                    <RefreshCw size={14} /> Retry
+                  </button>
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  <div className="flex justify-between text-[10px] font-mono text-gray-400">
+                    <span>PROGRESS</span>
+                    <span>{loadingProgress}%</span>
+                  </div>
+                  <div className="w-full h-1.5 bg-gray-800 rounded-full overflow-hidden">
+                    <motion.div 
+                      className="h-full bg-gradient-to-r from-cyan-500 to-blue-500 shadow-[0_0_12px_#06b6d4]"
+                      initial={{ width: '0%' }}
+                      animate={{ width: `${loadingProgress}%` }}
+                      transition={{ duration: 0.3 }}
+                    />
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </motion.div>

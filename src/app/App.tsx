@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import { Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
 import Earth from '@/components/earth/Earth';
 import { useAppStore } from '@/stores/useAppStore';
@@ -7,6 +7,8 @@ import { motion } from 'framer-motion';
 import LoadingSequence from '@/components/loading/LoadingSequence';
 import WorkspaceLayout from '@/components/layout/WorkspaceLayout';
 import LandingUI from '@/components/search/LandingUI';
+
+import * as THREE from 'three';
 
 export default function App() {
   const appState = useAppStore((state) => state.phase);
@@ -29,7 +31,15 @@ export default function App() {
           }}
           transition={{ duration: 1.5, ease: 'easeInOut' }}
         >
-          <Canvas camera={{ position: [0, 0, 8], fov: 45 }}>
+          <Canvas 
+            camera={{ position: [0, 0, 8], fov: 45 }}
+            gl={{ 
+              antialias: true, 
+              alpha: false, 
+              toneMapping: THREE.ACESFilmicToneMapping, 
+              toneMappingExposure: 1.2 
+            }}
+          >
             <Suspense fallback={null}>
               <Earth />
             </Suspense>
