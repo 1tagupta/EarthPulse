@@ -118,7 +118,7 @@ export default function WorkspaceLayout() {
           <div>
             <span className="text-[9px] uppercase font-mono tracking-widest text-cyan-400">Selected Basin / Boundary</span>
             <h2 className="text-xl font-light text-white truncate mt-1">{metadata.location_name}</h2>
-            <p className="text-xs text-gray-400 font-mono mt-0.5">CENTROID: {metadata.center[0].toFixed(4)}°, {metadata.center[1].toFixed(4)}°</p>
+            <p className="text-xs text-gray-400 font-mono mt-0.5">CENTROID: {(metadata.center?.[0] ?? 0).toFixed(4)}°, {(metadata.center?.[1] ?? 0).toFixed(4)}°</p>
           </div>
           
           <div className="grid grid-cols-2 gap-4 text-xs font-mono border-t border-white/5 pt-3">
@@ -268,8 +268,8 @@ export default function WorkspaceLayout() {
 
               {/* Coordinates bounds text overlay */}
               <div className="absolute bottom-2 left-2 text-[8px] font-mono text-gray-500 leading-tight">
-                W: {metadata.bounds[0].toFixed(1)}° / E: {metadata.bounds[2].toFixed(1)}° <br/>
-                S: {metadata.bounds[1].toFixed(1)}° / N: {metadata.bounds[3].toFixed(1)}°
+                W: {(metadata.bounds?.[0] ?? 0).toFixed(1)}° / E: {(metadata.bounds?.[2] ?? 0).toFixed(1)}° <br/>
+                S: {(metadata.bounds?.[1] ?? 0).toFixed(1)}° / N: {(metadata.bounds?.[3] ?? 0).toFixed(1)}°
               </div>
             </div>
 
@@ -325,13 +325,13 @@ export default function WorkspaceLayout() {
                 <span className="text-[8px] bg-cyan-500/10 text-cyan-400 border border-cyan-400/20 px-1.5 py-0.5 rounded font-mono">NASA SMAP</span>
               </div>
               <div className="my-2">
-                <span className="text-2xl font-light text-white font-mono">{activeDateData.surfaceMoisture.toFixed(3)}</span>
+                <span className="text-2xl font-light text-white font-mono">{(activeDateData.surfaceMoisture ?? 0).toFixed(3)}</span>
                 <span className="text-[10px] text-gray-400 ml-1 font-mono">m³/m³</span>
               </div>
               <div className="flex justify-between items-center text-[10px] font-mono border-t border-white/5 pt-2">
                 <span className="text-gray-500">ANOMALY Z-SCORE</span>
                 <span className={activeDateData.surfaceZScore < -0.8 ? 'text-amber-400' : 'text-green-400'}>
-                  {activeDateData.surfaceZScore.toFixed(2)}
+                  {(activeDateData.surfaceZScore ?? 0).toFixed(2)}
                 </span>
               </div>
             </div>
@@ -343,13 +343,13 @@ export default function WorkspaceLayout() {
                 <span className="text-[8px] bg-cyan-500/10 text-cyan-400 border border-cyan-400/20 px-1.5 py-0.5 rounded font-mono">NASA SMAP</span>
               </div>
               <div className="my-2">
-                <span className="text-2xl font-light text-white font-mono">{activeDateData.rootZoneMoisture.toFixed(3)}</span>
+                <span className="text-2xl font-light text-white font-mono">{(activeDateData.rootZoneMoisture ?? 0).toFixed(3)}</span>
                 <span className="text-[10px] text-gray-400 ml-1 font-mono">m³/m³</span>
               </div>
               <div className="flex justify-between items-center text-[10px] font-mono border-t border-white/5 pt-2">
                 <span className="text-gray-500">ANOMALY STATUS</span>
                 <span className={activeDateData.rootZoneZScore < -0.8 ? 'text-amber-400' : 'text-green-400'}>
-                  {getAnomalyText(activeDateData.rootZoneZScore)}
+                  {getAnomalyText(activeDateData.rootZoneZScore ?? 0)}
                 </span>
               </div>
             </div>
@@ -361,7 +361,7 @@ export default function WorkspaceLayout() {
                 <span className="text-[8px] bg-blue-500/10 text-blue-400 border border-blue-400/20 px-1.5 py-0.5 rounded font-mono">NASA GRACE</span>
               </div>
               <div className="my-2">
-                <span className="text-2xl font-light text-white font-mono">{activeDateData.groundwaterAnomaly.toFixed(1)}</span>
+                <span className="text-2xl font-light text-white font-mono">{(activeDateData.groundwaterAnomaly ?? 0).toFixed(1)}</span>
                 <span className="text-[10px] text-gray-400 ml-1 font-mono">cm EWT</span>
               </div>
               <div className="flex justify-between items-center text-[10px] font-mono border-t border-white/5 pt-2">
@@ -383,7 +383,7 @@ export default function WorkspaceLayout() {
                 <span className="text-[8px] bg-cyan-500/10 text-cyan-400 border border-cyan-400/20 px-1.5 py-0.5 rounded font-mono">CHIRPS v2.0</span>
               </div>
               <div className="my-2">
-                <span className="text-2xl font-light text-white font-mono">{activeDateData.precipitation.toFixed(1)}</span>
+                <span className="text-2xl font-light text-white font-mono">{(activeDateData.precipitation ?? 0).toFixed(1)}</span>
                 <span className="text-[10px] text-gray-400 ml-1 font-mono">mm/wk</span>
               </div>
               <div className="flex justify-between items-center text-[10px] font-mono border-t border-white/5 pt-2">

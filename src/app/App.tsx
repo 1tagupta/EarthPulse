@@ -15,13 +15,12 @@ export default function App() {
 
   return (
     <div className="w-full h-screen bg-space relative overflow-hidden text-white font-body">
-      <ErrorBoundary>
-        {/* 3D WebGL Canvas Layer - Transitions to Mini Globe */}
+      {/* 3D WebGL Canvas Layer - Transitions to Mini Globe */}
+      <ErrorBoundary label="Canvas">
         <motion.div 
           className="absolute inset-0 z-0 pointer-events-auto"
           initial={false}
           animate={{
-            // When in workspace, shrink to top-left corner
             width: appState === 'workspace' ? '350px' : '100%',
             height: appState === 'workspace' ? '350px' : '100%',
             top: appState === 'workspace' ? '40px' : '0px',
@@ -45,14 +44,20 @@ export default function App() {
             </Suspense>
           </Canvas>
         </motion.div>
+      </ErrorBoundary>
 
-        {/* Cinematic Loading Sequence */}
+      {/* Cinematic Loading Sequence */}
+      <ErrorBoundary label="LoadingSequence">
         <LoadingSequence />
+      </ErrorBoundary>
 
-        {/* 2D Landing UI Overlay */}
+      {/* 2D Landing UI Overlay */}
+      <ErrorBoundary label="LandingUI">
         <LandingUI />
+      </ErrorBoundary>
 
-        {/* Research Workspace Shell */}
+      {/* Research Workspace Shell */}
+      <ErrorBoundary label="WorkspaceLayout">
         <WorkspaceLayout />
       </ErrorBoundary>
     </div>

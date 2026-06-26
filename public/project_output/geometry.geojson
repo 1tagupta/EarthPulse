@@ -1,0 +1,39 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              83.3,
+              24.3
+            ],
+            [
+              88.3,
+              24.3
+            ],
+            [
+              88.3,
+              27.5
+            ],
+            [
+              83.3,
+              27.5
+            ],
+            [
+              83.3,
+              24.3
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Bihar, India",
+        "area_sqkm": 94163.0
+      }
+    }
+  ]
+}
