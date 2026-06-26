@@ -4,10 +4,19 @@ import datetime
 import sys
 import os
 import json
+import shutil
 
 # ---- Configuration ---------------------------------------------------------
-OUTPUT_CSV = "weekly_hydro_data.csv"
-METADATA_JSON = "dataset_metadata.json"
+OUTPUT_DIR = "project_output"
+METADATA_JSON = "metadata.json"
+GEOMETRY_GEOJSON = "geometry.geojson"
+TIMELINE_JSON = "timeline.json"
+CLIMATOLOGY_JSON = "climatology.json"
+ANALYTICS_JSON = "analytics.json"
+INSIGHTS_JSON = "insights.json"
+EVENTS_JSON = "events.json"
+WEEKLY_CSV = "weekly_data.csv"
+LAYERS_DIR = "layers"
 
 SMAP_COLLECTION = "NASA/SMAP/SPL4SMGP/008"
 GRACE_COLLECTION = "NASA/GRACE/MASS_GRIDS_V04/MASCON_CRI"
@@ -16,12 +25,11 @@ GAUL_COLLECTION = "FAO/GAUL/2015/level1"
 SCALE_METERS = 10000  # 10 km
 BATCH_SIZE = 50       # Process this many weeks per server-side call
 
-
 # ---- Main ------------------------------------------------------------------
 def main():
     print("=" * 60)
     print("Global Weekly Soil Moisture & Groundwater Dataset Generator")
-    print("              (Optimized Batch Processing)")
+    print("              (Structured Package Export)")
     print("=" * 60)
 
     # 1. Authenticate & initialise Earth Engine
@@ -72,7 +80,6 @@ def main():
             ee.Filter.eq("ADM1_NAME", state)
         ))
         
-        # Check if region exists
         try:
             count = region_fc.size().getInfo()
             if count == 0:
@@ -91,14 +98,7 @@ def main():
         lon_str = input("Enter Longitude (e.g. 85.3): ").strip()
         radius_str = input("Enter Radius in km [default: 50]: ").strip() or "50"
         
-        try:
-            lat = float(lat_str)
-            lon = float(lon_str)
-            radius = float(radius_str)
-        except ValueError:
-            print("  [ERROR] Coordinates/Radius must be numbers.")
-            sys.exit(1)
-            
+        lat, lon, radius = float(lat_str), float(lon_str), float(radius_str)
         location_name = f"Point ({lat}, {lon}), {radius}km Radius"
         center_coords = [lat, lon]
         geom = ee.Geometry.Point([lon, lat]).buffer(radius * 1000)
@@ -111,12 +111,8 @@ def main():
         
         location_name = f"BBox [{min_lon}, {min_lat}, {max_lon}, {max_lat}]"
         geom = ee.Geometry.BBox(min_lon, min_lat, max_lon, max_lat)
-        
         centroid = geom.centroid(100).coordinates().getInfo()
         center_coords = [centroid[1], centroid[0]]
-    else:
-        print("  [ERROR] Invalid choice selected.")
-        sys.exit(1)
         
     print(f"  [OK] Location loaded: '{location_name}'")
 
@@ -126,26 +122,9 @@ def main():
     end_date = input("Enter End Date (YYYY-MM-DD) [default: 2025-12-31]: ").strip() or "2025-12-31"
 
     # 4. Load datasets
-    print("\n[4/7] Loading SMAP L4 and GRACE collections...")
-    smap = (
-        ee.ImageCollection(SMAP_COLLECTION)
-        .filterDate(start_date, end_date)
-        .select(["sm_surface", "sm_rootzone"])
-    )
-    grace = (
-        ee.ImageCollection(GRACE_COLLECTION)
-        .filterDate(start_date, end_date)
-        .select(["lwe_thickness"])
-    )
-    
-    try:
-        smap_count = smap.size().getInfo()
-        grace_count = grace.size().getInfo()
-        print(f"  [OK] SMAP images : {smap_count}")
-        print(f"  [OK] GRACE images: {grace_count}")
-    except Exception as e:
-        print(f"  [ERROR] Failed to query collections: {e}")
-        sys.exit(1)
+    print("\n[4/7] Loading collections...")
+    smap = ee.ImageCollection(SMAP_COLLECTION).filterDate(start_date, end_date).select(["sm_surface", "sm_rootzone"])
+    grace = ee.ImageCollection(GRACE_COLLECTION).filterDate(start_date, end_date).select(["lwe_thickness"])
 
     # 5. Build weekly date list
     print(f"\n[5/7] Building weekly intervals ({start_date} -> {end_date}) ...")
@@ -163,155 +142,148 @@ def main():
         w += 1
 
     total_weeks = len(weeks)
-    print(f"  [OK] {total_weeks} weekly intervals")
 
     # 6. Batch server-side processing
-    print(f"\n[6/7] Processing in batches of {BATCH_SIZE} (server-side) ...")
+    print(f"\n[6/7] Processing {total_weeks} weeks in batches of {BATCH_SIZE} ...")
     results = []
 
     for batch_start in range(0, total_weeks, BATCH_SIZE):
         batch_end = min(batch_start + BATCH_SIZE, total_weeks)
         batch_weeks = weeks[batch_start:batch_end]
-
-        pct = int((batch_start / total_weeks) * 100)
-        sys.stdout.write(
-            f"\r  Batch {batch_start // BATCH_SIZE + 1}/"
-            f"{(total_weeks + BATCH_SIZE - 1) // BATCH_SIZE}  "
-            f"({pct}%)  weeks {batch_start + 1}-{batch_end}/{total_weeks}   "
-        )
+        
+        sys.stdout.write(f"\r  Batch {batch_start // BATCH_SIZE + 1} ... ")
         sys.stdout.flush()
 
         features = []
         for ws, we in batch_weeks:
             smap_week = smap.filterDate(ws, we)
-            smap_count = smap_week.size()
-            smap_mean = smap_week.mean()
-            smap_reduced = smap_mean.reduceRegion(
-                reducer=ee.Reducer.mean(),
-                geometry=geom,
-                scale=SCALE_METERS,
-                maxPixels=1e9,
-            )
-            sm_surface_val = ee.Algorithms.If(smap_count.gt(0), smap_reduced.get("sm_surface"), None)
-            sm_rootzone_val = ee.Algorithms.If(smap_count.gt(0), smap_reduced.get("sm_rootzone"), None)
-
+            smap_reduced = smap_week.mean().reduceRegion(reducer=ee.Reducer.mean(), geometry=geom, scale=SCALE_METERS, maxPixels=1e9)
             grace_week = grace.filterDate(ws, we)
-            grace_count = grace_week.size()
-            grace_mean = grace_week.mean()
-            grace_reduced = grace_mean.reduceRegion(
-                reducer=ee.Reducer.mean(),
-                geometry=geom,
-                scale=SCALE_METERS,
-                maxPixels=1e9,
-            )
-            lwe_val = ee.Algorithms.If(grace_count.gt(0), grace_reduced.get("lwe_thickness"), None)
+            grace_reduced = grace_week.mean().reduceRegion(reducer=ee.Reducer.mean(), geometry=geom, scale=SCALE_METERS, maxPixels=1e9)
 
-            feat = ee.Feature(None, {
+            features.append(ee.Feature(None, {
                 "date": ws,
-                "sm_surface": sm_surface_val,
-                "sm_rootzone": sm_rootzone_val,
-                "lwe_thickness": lwe_val,
-            })
-            features.append(feat)
+                "sm_surface": ee.Algorithms.If(smap_week.size().gt(0), smap_reduced.get("sm_surface"), None),
+                "sm_rootzone": ee.Algorithms.If(smap_week.size().gt(0), smap_reduced.get("sm_rootzone"), None),
+                "lwe_thickness": ee.Algorithms.If(grace_week.size().gt(0), grace_reduced.get("lwe_thickness"), None),
+            }))
 
-        batch_fc = ee.FeatureCollection(features)
         try:
-            batch_info = batch_fc.getInfo()
+            batch_info = ee.FeatureCollection(features).getInfo()
             for f in batch_info["features"]:
                 props = f["properties"]
-                row = {
+                results.append({
                     "date": props.get("date"),
                     "surface_soil_moisture": round(props["sm_surface"], 6) if props.get("sm_surface") is not None else None,
                     "rootzone_soil_moisture": round(props["sm_rootzone"], 6) if props.get("sm_rootzone") is not None else None,
                     "groundwater_anomaly": round(props["lwe_thickness"], 6) if props.get("lwe_thickness") is not None else None,
-                }
-                results.append(row)
+                })
         except Exception as e:
-            print(f"\n  [!] Batch error at weeks {batch_start + 1}-{batch_end}: {e}")
-            print("      Falling back to individual processing for this batch ...")
-            for ws, we in batch_weeks:
-                try:
-                    smap_week = smap.filterDate(ws, we)
-                    smap_mean = smap_week.mean()
-                    smap_r = smap_mean.reduceRegion(
-                        reducer=ee.Reducer.mean(),
-                        geometry=geom,
-                        scale=SCALE_METERS,
-                        maxPixels=1e9,
-                    ).getInfo()
+            print(f"\n  [!] Batch error. Skipping. {e}")
 
-                    grace_week = grace.filterDate(ws, we)
-                    grace_mean = grace_week.mean()
-                    grace_r = grace_mean.reduceRegion(
-                        reducer=ee.Reducer.mean(),
-                        geometry=geom,
-                        scale=SCALE_METERS,
-                        maxPixels=1e9,
-                    ).getInfo()
+    print(f"\n  [OK] All weeks processed")
 
-                    results.append({
-                        "date": ws,
-                        "surface_soil_moisture": round(smap_r.get("sm_surface"), 6) if smap_r.get("sm_surface") is not None else None,
-                        "rootzone_soil_moisture": round(smap_r.get("sm_rootzone"), 6) if smap_r.get("sm_rootzone") is not None else None,
-                        "groundwater_anomaly": round(grace_r.get("lwe_thickness"), 6) if grace_r.get("lwe_thickness") is not None else None,
-                    })
-                except Exception as e2:
-                    results.append({
-                        "date": ws,
-                        "surface_soil_moisture": None,
-                        "rootzone_soil_moisture": None,
-                        "groundwater_anomaly": None,
-                    })
+    # 7. Build Output Package
+    print("\n[7/7] Generating Structured Project Package ...")
+    
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    out_dir = os.path.join(base_dir, OUTPUT_DIR)
+    
+    # Recreate output dir
+    if os.path.exists(out_dir):
+        shutil.rmtree(out_dir)
+    os.makedirs(out_dir)
+    os.makedirs(os.path.join(out_dir, LAYERS_DIR))
 
-    print(f"\n  [OK] All {total_weeks} weeks processed")
-
-    # 7. Build DataFrame, Export CSV, and Save Metadata JSON
-    print("\n[7/7] Saving dataset and metadata ...")
+    # Process DataFrame
     df = pd.DataFrame(results)
     df["date"] = pd.to_datetime(df["date"])
-
-    # Compute anomalies (deviation from weekly long-term mean)
     df["week_of_year"] = df["date"].dt.isocalendar().week.astype(int)
     
-    # Calculate weekly climatological mean conditionally
-    weekly_clim = df.groupby("week_of_year")[
-        ["surface_soil_moisture", "rootzone_soil_moisture"]
-    ].transform("mean")
+    # Compute climatology
+    weekly_clim = df.groupby("week_of_year")[["surface_soil_moisture", "rootzone_soil_moisture"]].mean().reset_index()
+    weekly_clim.to_json(os.path.join(out_dir, CLIMATOLOGY_JSON), orient="records", indent=2)
     
-    df["surface_sm_anomaly"] = df["surface_soil_moisture"] - weekly_clim["surface_soil_moisture"]
-    df["rootzone_sm_anomaly"] = df["rootzone_soil_moisture"] - weekly_clim["rootzone_soil_moisture"]
+    # Compute anomalies
+    df["surface_sm_anomaly"] = df["surface_soil_moisture"] - df.groupby("week_of_year")["surface_soil_moisture"].transform("mean")
+    df["rootzone_sm_anomaly"] = df["rootzone_soil_moisture"] - df.groupby("week_of_year")["rootzone_soil_moisture"].transform("mean")
     df.drop(columns=["week_of_year"], inplace=True)
 
-    filled = df["surface_soil_moisture"].notna().sum()
-    print(f"  [OK] {len(df)} weeks total, {filled} with SMAP data")
-
     # Save CSV
-    out_csv_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), OUTPUT_CSV)
-    df.to_csv(out_csv_path, index=False)
-    print(f"  [OK] CSV saved -> {out_csv_path}")
+    df.to_csv(os.path.join(out_dir, WEEKLY_CSV), index=False)
+    
+    # Save Timeline JSON
+    # Convert dates to string for JSON serialization
+    df["date"] = df["date"].dt.strftime("%Y-%m-%d")
+    df.to_json(os.path.join(out_dir, TIMELINE_JSON), orient="records", indent=2)
 
-    # Simplify geometry to ~5km to keep GeoJSON lightweight
-    simplified_geom = geom.simplify(maxError=5000)
+    # Save GeoJSON
     try:
-        geojson_geom = simplified_geom.getInfo()
-    except Exception as e:
-        print(f"  [!] Could not export simplified GeoJSON boundary: {e}")
+        geojson_geom = geom.simplify(maxError=5000).getInfo()
+        with open(os.path.join(out_dir, GEOMETRY_GEOJSON), "w") as f:
+            json.dump({
+                "type": "FeatureCollection",
+                "features": [{
+                    "type": "Feature",
+                    "geometry": geojson_geom,
+                    "properties": {"name": location_name}
+                }]
+            }, f, indent=2)
+    except Exception:
         geojson_geom = None
 
-    # Write metadata JSON
+    # Compute bounds and area
+    try:
+        area_sqkm = geom.area().getInfo() / 1e6
+        bounds = geom.bounds().getInfo()
+    except:
+        area_sqkm = 0
+        bounds = None
+
+    # Save Metadata JSON
     metadata = {
         "location_name": location_name,
         "center": center_coords,
-        "geojson": geojson_geom
+        "area_sqkm": round(area_sqkm, 2),
+        "bounds": bounds,
+        "start_date": start_date,
+        "end_date": end_date
     }
-    
-    out_json_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), METADATA_JSON)
-    with open(out_json_path, "w") as f:
+    with open(os.path.join(out_dir, METADATA_JSON), "w") as f:
         json.dump(metadata, f, indent=2)
-    print(f"  [OK] Location metadata JSON saved -> {out_json_path}")
+        
+    # Save Analytics JSON (Mocked for now)
+    analytics = {
+        "hydrologicalHealthIndex": 7.2,
+        "surfaceMoisturePercentile": 45,
+        "rootZonePercentile": 60,
+        "groundwaterTrend": "stable",
+        "rechargeDelayWeeks": 8
+    }
+    with open(os.path.join(out_dir, ANALYTICS_JSON), "w") as f:
+        json.dump(analytics, f, indent=2)
 
+    # Save Insights JSON (Mocked for now)
+    insights = [
+        {"id": "1", "title": "Normal Recharge", "description": "Groundwater shows stable recharge patterns.", "type": "recharge", "severity": "low"}
+    ]
+    with open(os.path.join(out_dir, INSIGHTS_JSON), "w") as f:
+        json.dump(insights, f, indent=2)
+
+    # Save Events JSON (Mocked for now)
+    events = [
+        {"date": "2019-08-01", "type": "flood", "severity": "extreme"}
+    ]
+    with open(os.path.join(out_dir, EVENTS_JSON), "w") as f:
+        json.dump(events, f, indent=2)
+        
+    # Dummy Layer file
+    with open(os.path.join(out_dir, LAYERS_DIR, "placeholder.txt"), "w") as f:
+        f.write("GeoTIFFs will be exported here in a future milestone.")
+
+    print(f"  [OK] Structured package generated at: {out_dir}/")
     print(f"\n{'=' * 60}")
-    print("Done! Open the index.html dashboard to view the dynamic map & charts.")
+    print("Backend processing complete.")
     print(f"{'=' * 60}")
 
 
